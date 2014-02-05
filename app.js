@@ -6,17 +6,19 @@
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var actions = require('./lib/actions');
 var http = require('http');
 var path = require('path');
 var googleapis = require('googleapis');
 var OAuth2Client = googleapis.OAuth2Client;
 var config = require('./config/config.json');
 
-var oauth2Client = new OAuth2Client(config.web.client_id, config.web.client_secret, config.web.redirect_uri[2]);
+
+//var oauth2Client = new OAuth2Client(config.web.client_id, config.web.client_secret, config.web.redirect_uri[2]);
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 5000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -36,6 +38,9 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.get('/locations', function( req, res ){
+    actions.getData( req, res );
+})
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
