@@ -14,7 +14,7 @@ var OAuth2Client = googleapis.OAuth2Client;
 var config = require('./config/config.json');
 
 
-//var oauth2Client = new OAuth2Client(config.web.client_id, config.web.client_secret, config.web.redirect_uri[2]);
+var oauth2 = new OAuth2Client(config.web.client_id, config.web.client_secret, config.web.redirect_uri[2]);
 var app = express();
 
 // all environments
@@ -38,9 +38,10 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.get('/locations', function( req, res ){
+app.get('/locations/:lat/:lng', function( req, res ){
     actions.getData( req, res );
-})
+});
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
