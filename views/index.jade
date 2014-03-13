@@ -33,16 +33,33 @@ block content
         var list = document.getElementById('breweryList')
             ,ct = document.getElementById('breweryCount')
             ,i = locations.totalResults
-            ,li;
+            ,brewery = "";
 
         ct.innerHTML = locations.totalResults;
 
         while(i--){
-            li = document.createElement('li');
-            list.appendChild(li).textContent = locations.data[i].name;
+            brewery += '<article class="brewery">';
+            brewery += '<header class="brewery-name">'+locations.data[i].brewery.name+'</header>';
+            brewery += '<div class="brewery-address">'+locations.data[i].streetAddress +', '+locations.data[i].locality+'</div>';
+            if(locations.data[i].brewery.website){
+                    brewery += '<div class="brewery-web">'+locations.data[i].brewery.website +'</div>';
+            }else{
+                          brewery += '<div class="brewery-web">no website</div>';
+            }
+            if(locations.data[i].phone){
+             brewery += '<div class="brewery-phone">'+locations.data[i].phone +'</div>';
+            }else{
+             brewery += '<div class="brewery-phone">no phone number</div>';
+            }
+
+            brewery += '<div class="brewery-open">Open to the public: '+locations.data[i].openToPublic +'</div>';
+            brewery += '</article>';
+
+
+
         }
 
-
+        list.innerHTML = brewery;
 
 
      }
