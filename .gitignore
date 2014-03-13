@@ -6,9 +6,8 @@
 *.out
 ## Project file and directory ignore
 build/*
-config/brewery-db.js
-config/googleApi.json
-config/config.json
+config/*
+
 ## IDE Specific ignores
 .idea/*
 *.iml

@@ -66,35 +66,12 @@ var gotToken = function () {
 
 // send a simple 'hello world' timeline card with a delete option
 var insertHello = function (client, errorCallback, successCallback) {
+
     client
         .mirror.timeline.insert(
         {
             "text": "Glass Brew",
             "html": "<article>Glass Brew HTML</article>",
-            "callbackUrl": "https://localhost:5000",
-            "menuItems": [
-                {"action": "DELETE"}
-            ]
-        }
-    )
-        .withAuthClient(oauth2)
-        .execute(function (err, data) {
-            if (!!err)
-                errorCallback(err);
-            else
-                successCallback(data);
-        });
-};
-
-// send a simple 'hello world' timeline card with a delete option
-var insertLocation = function (client, errorCallback, successCallback) {
-
-
-    client
-        .mirror.timeline.insert(
-        {
-            "text": "Brewery DB on the Glass Brew app",
-            "callbackUrl": "https://localhost:5000",
             "location": {
                 "kind": "mirror#location",
                 "latitude": 37.4028344,
@@ -102,6 +79,7 @@ var insertLocation = function (client, errorCallback, successCallback) {
                 "displayName": "Brewery Name",
                 "address": "400 Cottonwood Circle, Raleigh NC"
             },
+            "callbackUrl": "https://localhost:5000",
             "menuItems": [
                 {"action":"NAVIGATE"},
                 {"action": "REPLY"},
@@ -117,6 +95,7 @@ var insertLocation = function (client, errorCallback, successCallback) {
                 successCallback(data);
         });
 };
+
 
 
 var listTimeline = function (client, errorCallback, successCallback) {
@@ -140,9 +119,10 @@ var gotToken = function () {
                 return;
             }
             console.log('mirror client', client);
+            actions.getGlassLocation();
             listTimeline(client, failure, success);
             insertHello(client, failure, success);
-            insertLocation(client, failure, success);
+
         });
 };
 
@@ -166,9 +146,10 @@ app.get('/', function(req, res){
     if (!oauth2.credentials) {
         // generates a url that allows offline access and asks permissions
         // for Mirror API scope.
+        // multiple scopes are separated by a space O__o (wtf)
         var url = oauth2.generateAuthUrl({
             access_type: 'offline',
-            scope: 'https://www.googleapis.com/auth/glass.timeline'
+            scope: 'https://www.googleapis.com/auth/glass.timeline https://www.googleapis.com/auth/glass.location'
         });
         res.redirect(url);
     } else {
